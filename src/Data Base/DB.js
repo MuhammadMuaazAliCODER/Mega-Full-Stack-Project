@@ -6,8 +6,8 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    const uri = process.env.MONGO_URI; // 👈 should not be undefined
-    console.log("Mongo URI:", uri);     // debug log
+    const uri = process.env.MONGO_URI; 
+    console.log("Mongo URI:", uri);     
     await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
