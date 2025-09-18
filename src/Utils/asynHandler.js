@@ -19,4 +19,5 @@ try {
 }
 }
 
-export {asynHandler};
+export {asynHandler} ;
+export {asynHandler2};
