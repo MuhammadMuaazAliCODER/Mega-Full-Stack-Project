@@ -18,7 +18,6 @@ type:String,
     unique:true,
     lowercase : true,
     trim:true
-
 },
 
 FullName:{
@@ -31,31 +30,25 @@ FullName:{
 Avatar:{
     type:String, //cloudnary URL
     required:true,
-
 },
 
 CoverImgae:{
     type:String, //cloudnary URL
-    
 },
 
 WatchHistory:[{
     type:Schema.Types.ObjectId,
     ref : "Video"
-}]
-,
+}],
 
 password:{
     type:String,
     required:[true , "Password is required : "],
-
 },
 
 RefreshTocken:{
 type:String,
-
 }
-
 
 },{
     timestamps:true
@@ -81,10 +74,7 @@ userSchema.methods.generateAccessToken = function () {
     {
         expiresIn : process.env.ACCESS_TOKEN_EXPIRY
     }
-)
-   
-
-}
+)}
 
 userSchema.methods.generateRefreshToken = function () {
     return jwt.sign({
@@ -95,6 +85,6 @@ userSchema.methods.generateRefreshToken = function () {
     {
         expiresIn : process.env.REFRESH_TOKEN_EXPIRY
     }
-)
-}
+)}
+
 export const user = mongoose.model("User",userSchema)
