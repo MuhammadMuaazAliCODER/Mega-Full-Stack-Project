@@ -41,8 +41,22 @@ WatchHistory:[{
     type:Schema.Types.ObjectId,
     ref : "Video"
 }]
+,
+
+password:{
+    type:String,
+    required:[true , "Password is required : "],
+
+},
+
+RefreshTocken:{
+type:String,
+
+}
 
 
-},{})
+},{
+    timestamps:true
+})
 
 export const user = mongoose.model("User",userSchema)
