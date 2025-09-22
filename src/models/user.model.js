@@ -83,7 +83,7 @@ userSchema.methods.generateAccessToken = function () {
     }
 )
    
-        
+
 }
 
 userSchema.methods.generateRefreshToken = function () {

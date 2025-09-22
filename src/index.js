@@ -16,10 +16,7 @@ connectDB()
  //Data Base Connection 
 //Note asyn fuction return a promise so we can use then and catch
 
-app.on("error" ,(error)=>{
-    console.log("Error in DB connection",error);
-    throw error;
-})
+
 .then(()=>{
     app.listen(process.env.PORT || 8000,()=>{
         console.log(`Server is running on port ${process.env.PORT || 8000}`);
@@ -30,7 +27,10 @@ app.on("error" ,(error)=>{
     console.log("MongoDB connection error : ",error);
 
 })
-
+app.on("error" ,(error)=>{
+    console.log("Error in DB connection",error);
+    throw error;
+})
 // ;(async () => {
 //     try {
 //        await mongoose.connect('${proess.env.MONGO_URL}/${DB_Name}');
