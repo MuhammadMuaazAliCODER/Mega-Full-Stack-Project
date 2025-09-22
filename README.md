@@ -6,7 +6,7 @@ The project replicates core YouTube functionality like **video upload, playback,
 ---
 
 ## 📌 Table of Contents
-- [Features](#-features)
+- [Models](https://app.eraser.io/workspace/YtPqZ1VogxGy1jzIDkzj)
 - [Tech Stack](#-tech-stack)
 - [Project Goals](#-project-goals)
 - [Installation](#-installation)
