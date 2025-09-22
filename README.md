@@ -31,7 +31,7 @@ The project replicates core YouTube functionality like **video upload, playback,
 ---
 
 ## 🛠 Tech Stack
-**Frontend:** React, HTML, CSS, JavaScript  
+**Frontend:** HTML, CSS, JavaScript  
 **Backend:** Node.js, Express.js  
 **Database:** MongoDB  
 **Authentication:** JWT & bcrypt  
