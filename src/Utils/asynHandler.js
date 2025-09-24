@@ -1,5 +1,5 @@
 const asynHandler = (request_hander)=>{
-(req,res,next) =>
+return (req,res,next) =>
     {
     Promise.reslove(request_hander(req,res,next)).catch(err=>{
 

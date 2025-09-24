@@ -13,4 +13,14 @@ app.use(express.json({  limit : '10mb' }));
 app.use(express.urlencoded({ extended:true,  limit : '10mb' }));
 app.use(express.static('public'));
 app.use(cookieParser())
+
+//routes
+
+import router from "../src/routes/user.routes.js"
+
+//routes decleration
+
+app.use("/api/v1/users",router)
+// http://localhost:8000/api/v1/users/register
+
 export {app};
