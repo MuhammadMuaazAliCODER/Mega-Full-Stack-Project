@@ -16,7 +16,7 @@ app.use(cookieParser())
 
 //routes
 
-import router from "../src/routes/user.routes.js"
+import router, { abc } from "./routes/user.routes.js"
 
 //routes decleration
 

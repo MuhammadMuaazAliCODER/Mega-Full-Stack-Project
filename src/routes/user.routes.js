@@ -5,4 +5,7 @@ const router = Router()
 
 router.route("/register").post(registerUser)
 
-export default {router};
+export default router;
+
+export const abc = () => console.log("abc Hello World");
+
