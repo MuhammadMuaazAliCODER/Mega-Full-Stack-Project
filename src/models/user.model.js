@@ -46,7 +46,7 @@ password:{
     required:[true , "Password is required : "],
 },
 
-RefreshTocken:{
+RefreshToken:{
 type:String,
 }
 
@@ -56,7 +56,7 @@ type:String,
  
 userSchema.pre("save", async function (next) {
     if(!this.isModified("password")){} return;
-    this.password = bcrypt.hash(this.password,10)
+    this.password = await bcrypt.hash(this.password,10)
     next()
 })
 userSchema.methods.isPasswordCorrect = async function (password) {
