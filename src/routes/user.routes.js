@@ -7,5 +7,5 @@ router.route("/register").post(registerUser)
 
 export default router;
 
-export const abc = () => console.log("abc Hello World");
+
 
