@@ -16,7 +16,6 @@ connectDB()
  //Data Base Connection 
 //Note asyn fuction return a promise so we can use then and catch
 
-
 .then(()=>{
     app.listen(process.env.PORT || 8000,()=>{
         console.log(`Server is running on port ${process.env.PORT || 8000}`);
