@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config(); 
+
 import mongoose, { Schema } from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -79,7 +82,7 @@ userSchema.methods.generateAccessToken = function () {
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+      expiresIn: "1d",
     }
   );
 };
@@ -90,7 +93,7 @@ userSchema.methods.generateRefreshToken = function () {
     { id: this._id },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+      expiresIn: "10d",
     }
   );
 };

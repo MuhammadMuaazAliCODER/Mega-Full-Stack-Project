@@ -6,24 +6,27 @@ import {Apiresponse} from '../Utils/apiresponse.js'
 import {uploadUserImages} from "../Validations/uploader_check.validation.js";
 
 
-const genrateAccessAndRefereshToken = async (userId) =>{
-   try {
-    const User =   await user.findById(userId);
-    const accessToken = User.generateAccessToken()
-    const refereshToken = User.generateRefreshToken()
+const generateAccessAndRefreshToken = async (userId) => {
+  try {
+    const User = await user.findById(userId);
 
-    User.refereshToken = refereshToken ;
-    await User.save({ validateBeforeSave : false });
+    const accessToken = User.generateAccessToken();
+    const refreshToken = User.generateRefreshToken();
 
-    return {accessToken , refereshToken}
-   } catch (error) {
-      throw new ApiError (500,"Some thing went wrong generating access and referesh token")
-   }
-}
+    User.refreshToken = refreshToken;
+    await User.save({ validateBeforeSave: false });
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new ApiError(500, "Something went wrong while generating access and refresh tokens");
+  }
+};
+
 
 const registerUser = asynHandler(async(req , res )=>{
  
-     const {FullName,email,userName,password} = req.body;
+    const {FullName,email,userName,password} = req.body;
+
    
 
     if (![FullName, email, userName, password].every(Boolean)){
@@ -58,34 +61,43 @@ const registerUser = asynHandler(async(req , res )=>{
     
 })
 
-const loginUser = asynHandler(async(req,res) => {
+const loginUser = asynHandler(async (req, res) => {
+  console.log(req);
+  const { email, userName, password } = req.body;
 
- const {email,userName,password} = req.body;
- if( (!userName || !email) && !password){
-    throw new ApiError(400, "Validation failed: both email or userName and password fields are required.");
- }
-    const exsistedUser =  await user.findOne({
-        $or:[{ userName }, { email } ]
-   })
-   if(!exsistedUser){
-       throw new ApiError(404, "User with this email or userName is not exist");
-   }
-   const isPasswordValid =  exsistedUser.isPasswordCorrect(password);
-    if(!isPasswordValid){
-      throw new ApiError(401, "Password incorrect.");
-   }
-   const {accessToken , refereshToken} = await genrateAccessAndRefereshToken(exsistedUser._id)
-   const logedInUser = await user.findById(exsistedUser._id).select(" -password -RefreshToken ")
-   const options = {
-    httpOnly :true,
-    secure :true
-   }
-      return res.
-      status(200).
-      cookie("accessToken" , accessToken , options).
-      cookie("refereshToken",refereshToken,options).
-      json(new Apiresponse(200,{user:logedInUser , accessToken , refereshToken},"User logged in succssfully "))
-})
+  if ((!userName || !email) && !password) {
+    throw new ApiError(400, "Validation failed: either email or userName and password are required.");
+  }
+
+  const existedUser = await user.findOne({
+    $or: [{ userName }, { email }],
+  });
+
+  if (!existedUser) {
+    throw new ApiError(404, "User with this email or userName does not exist");
+  }
+
+  const isPasswordValid = await existedUser.isPasswordCorrect(password); 
+
+  if (!isPasswordValid) {
+    throw new ApiError(401, "Password incorrect.");
+  }
+
+  const { accessToken, refereshToken } = await generateAccessAndRefreshToken(existedUser._id);
+
+  const loggedInUser = await user.findById(existedUser._id).select("-password -refereshToken");
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refereshToken", refereshToken, options)
+    .json(new Apiresponse(200, { user: loggedInUser, accessToken, refereshToken }, "User logged in successfully"));
+});
 
 const logoutUser = asynHandler(async(req,res) =>{
   
