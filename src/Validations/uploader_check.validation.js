@@ -2,12 +2,10 @@ import {upload_on_cloud} from '../Utils/cloudnary.js'
 import {ApiError} from "../Utils/apierrors.js" 
 
 /**
- * Uploads avatar and cover image from req.files to Cloudinary.
- * Returns URLs of uploaded images.
- *
- * @param {Object} req - Express request object with req.files
- * @returns {Object} { avatarUrl, coverImageUrl }
- * @throws {ApiError} if files are missing or upload fails
+ 
+ * @param {Object} req 
+ * @returns {Object} 
+ * @throws {ApiError} 
  */
 export const uploadUserImages = async (req, res) => {
   const avatarLocalPath = req.files?.Avatar?.[0]?.path || null;
