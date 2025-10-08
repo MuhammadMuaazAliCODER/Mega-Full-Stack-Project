@@ -12,9 +12,14 @@ const generateAccessAndRefreshToken = async (userId) => {
 
     const accessToken = User.generateAccessToken();
     const refreshToken = User.generateRefreshToken();
-
+    
+    
+    
     User.refreshToken = refreshToken;
     await User.save({ validateBeforeSave: false });
+    
+    console.log("access Tokens:", accessToken );
+    console.log("refresh Tokens:", refreshToken );
 
     return { accessToken, refreshToken };
   } catch (error) {
@@ -62,7 +67,7 @@ const registerUser = asynHandler(async(req , res )=>{
 })
 
 const loginUser = asynHandler(async (req, res) => {
-  console.log(req);
+  // console.log(req);
   const { email, userName, password } = req.body;
 
   if ((!userName || !email) && !password) {
@@ -83,7 +88,7 @@ const loginUser = asynHandler(async (req, res) => {
     throw new ApiError(401, "Password incorrect.");
   }
 
-  const { accessToken, refereshToken } = await generateAccessAndRefreshToken(existedUser._id);
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(existedUser._id);
 
   const loggedInUser = await user.findById(existedUser._id).select("-password -refereshToken");
 
@@ -95,8 +100,8 @@ const loginUser = asynHandler(async (req, res) => {
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
-    .cookie("refereshToken", refereshToken, options)
-    .json(new Apiresponse(200, { user: loggedInUser, accessToken, refereshToken }, "User logged in successfully"));
+    .cookie("refreshToken", refreshToken, options)
+    .json(new Apiresponse(200, { user: loggedInUser, accessToken, refreshToken }, "User logged in successfully"));
 });
 
 const logoutUser = asynHandler(async(req,res) =>{
