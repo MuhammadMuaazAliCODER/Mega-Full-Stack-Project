@@ -39,7 +39,7 @@ const userSchema = new Schema(
     CoverImage: {
       type: String, // Cloudinary URL
     },
-
+//for avatar and cover image you can use cloudinary or any other service to store images and save the url in the database
     WatchHistory: [
       {
         type: Schema.Types.ObjectId,
@@ -55,9 +55,24 @@ const userSchema = new Schema(
     RefreshToken: {
       type: String,
     },
+
+    // 👇 New Fields for Email Verification
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    verificationToken: {
+      type: String,
+    },
+
+    verificationTokenExpires: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );
+
 
 
 userSchema.pre("save", async function (next) {
