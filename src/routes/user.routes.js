@@ -13,11 +13,12 @@ router.post("/verify-otp", verifyOtp);
 // Register route (after OTP verification)
 router.route("/register").post(
   upload.fields([
-    { name: "Avatar", maxCount: 1 },
-    { name: "CoverImgae", maxCount: 1 },
+    { name: "avatar", maxCount: 1 },
+    { name: "coverImage", maxCount: 1 },
   ]),
   registerUser
 );
+
 
 router.route("/login").post(loginUser);
 

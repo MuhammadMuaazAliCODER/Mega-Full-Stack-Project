@@ -3,11 +3,9 @@ import { ApiError } from "../Utils/apierrors.js";
 import { user } from "../models/user.model.js";
 import { uploadUserImages } from "../Validations/uploader_check.validation.js";
 import { Apiresponse } from "../Utils/apiresponse.js";
-import { otpStore } from "./otp.controler.js"; // ✅ Import OTP store for email verification
+import { otpStore } from "./otp.controler.js"; 
 
-// -----------------------------
-// Generate Access + Refresh Tokens
-// -----------------------------
+
 const generateAccessAndRefreshToken = async (userId) => {
   try {
     const User = await user.findById(userId);
