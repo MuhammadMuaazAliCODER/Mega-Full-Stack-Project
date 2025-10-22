@@ -90,8 +90,7 @@ export const updatePassword = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     User.password = hashedPassword;
-    await User.save();
-
+    await User.save({ validateBeforeSave: false });
     otpStore.delete(email);
 
     return res
