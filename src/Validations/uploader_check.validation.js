@@ -8,8 +8,9 @@ import {ApiError} from "../Utils/apierrors.js"
  * @throws {ApiError} 
  */
 export const uploadUserImages = async (req, res) => {
+  console.log("Files received in uploader_check.validation.js:", req.files);
   const avatarLocalPath = req.files?.Avatar?.[0]?.path || null;
-  const coverImageLocalPath = req.files?.CoverImgae?.[0]?.path || null;
+  const coverImageLocalPath = req.files?.CoverImage?.[0]?.path || null;
 
   if (!avatarLocalPath) {
 //    return res.status(400).json(new ApiError (400,"Avatar File is required"))

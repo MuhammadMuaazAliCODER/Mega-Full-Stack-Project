@@ -13,10 +13,10 @@ export const sendOtp = async (req, res) => {
     return res.status(400).json(new ApiError(400, "Email is required"));
 
   try {
-    // Generate a secure 6-digit OTP
+   
     const otp = crypto.randomInt(100000, 999999);
 
-    // Store OTP with expiry (5 minutes)
+    
     otpStore.set(email, {
       otp,
       expires: Date.now() + 5 * 60 * 1000,

@@ -59,8 +59,10 @@ const registerUser = asynHandler(async (req, res) => {
       .json(new ApiError(409, "User with this email or username already exists."));
   }
 
+  console.log("Proceeding with user registration...");
   // ✅ Step 4: Upload avatar and cover images
   const { avatarUrl, coverImageUrl } = await uploadUserImages(req, res);
+  console.log("Avatar URL:", avatarUrl);
 
   // ✅ Step 5: Create user
   const newUser = await user.create({

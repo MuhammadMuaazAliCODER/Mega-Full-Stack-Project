@@ -25,8 +25,8 @@ router.post("/verify-otp", verifyOtp);
 router.post(
   "/register",
   upload.fields([
-    { name: "avatar", maxCount: 1 },
-    { name: "coverImage", maxCount: 1 },
+    { name: "Avatar", maxCount: 1 },
+    { name: "CoverImage", maxCount: 1 },
   ]),
   registerUser
 );
@@ -36,6 +36,6 @@ router.post("/logout", verifyJWT, logoutUser);
 
 router.post("/send-password-otp", sendPasswordResetOtp);
 router.post("/verify-password-otp", verifyPasswordResetOtp);
-router.post("/update-password", updatePassword);
+router.patch("/update-password", updatePassword);
 
 export default router;
