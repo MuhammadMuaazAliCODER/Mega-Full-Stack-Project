@@ -19,8 +19,6 @@ const generateAccessAndRefreshToken = async (userId) => {
     User.RefreshToken = refreshToken;
     await User.save({ validateBeforeSave: false });
 
-    console.log("Access Token:", accessToken);
-    console.log("Refresh Token:", refreshToken);
 
     return { accessToken, refreshToken };
   } catch (error) {
@@ -29,26 +27,24 @@ const generateAccessAndRefreshToken = async (userId) => {
   }
 };
 
-// -----------------------------
-// Register User (With OTP Check)
-// -----------------------------
+
 const registerUser = asynHandler(async (req, res) => {
   const { FullName, email, userName, password } = req.body;
 
-  // ✅ Step 1: Basic validation
+ 
   if (![FullName, email, userName, password].every(Boolean)) {
     return res
       .status(400)
       .json(new ApiError(400, "FullName, email, userName, and password are required."));
   }
 
-  // ✅ Step 2: Check OTP verification
+  
   const verifiedRecord = otpStore.get(email);
   if (!verifiedRecord || !verifiedRecord.verified) {
     return res.status(401).json(new ApiError(401, "Email not verified. Please verify OTP first."));
   }
 
-  // ✅ Step 3: Check for existing user
+  
   const existedUser = await user.findOne({
     $or: [{ userName }, { email }],
   });
@@ -60,11 +56,11 @@ const registerUser = asynHandler(async (req, res) => {
   }
 
   console.log("Proceeding with user registration...");
-  // ✅ Step 4: Upload avatar and cover images
+  
   const { avatarUrl, coverImageUrl } = await uploadUserImages(req, res);
   console.log("Avatar URL:", avatarUrl);
 
-  // ✅ Step 5: Create user
+  
   const newUser = await user.create({
     FullName,
     Avatar: avatarUrl,
@@ -72,7 +68,7 @@ const registerUser = asynHandler(async (req, res) => {
     email,
     password,
     userName: userName.toLowerCase(),
-    isVerified: true, // ✅ Mark as verified since OTP was confirmed
+    isVerified: true, 
   });
 
   const createdUser = await user
@@ -83,7 +79,7 @@ const registerUser = asynHandler(async (req, res) => {
     throw new ApiError(500, "Something went wrong while registering the user.");
   }
 
-  // ✅ Step 6: Remove OTP record after successful registration
+ 
   otpStore.delete(email);
 
   return res
@@ -91,9 +87,7 @@ const registerUser = asynHandler(async (req, res) => {
     .json(new Apiresponse(201, createdUser, "User registered successfully"));
 });
 
-// -----------------------------
-// Login User
-// -----------------------------
+
 const loginUser = asynHandler(async (req, res) => {
   const { email, userName, password } = req.body;
 
@@ -138,9 +132,7 @@ const loginUser = asynHandler(async (req, res) => {
     );
 });
 
-// -----------------------------
-// Logout User
-// -----------------------------
+
 const logoutUser = asynHandler(async (req, res) => {
   await user.findByIdAndUpdate(
     req.user._id,
@@ -160,7 +152,5 @@ const logoutUser = asynHandler(async (req, res) => {
     .json(new Apiresponse(200, {}, "User logged out successfully"));
 });
 
-// -----------------------------
-// Export Controllers
-// -----------------------------
+
 export { registerUser, loginUser, logoutUser };
