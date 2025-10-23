@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
-import { user } from "../models/user.model.js"; // fixed capitalization of Models
+import { user } from "../models/user.model.js"; 
 import { ApiError } from "../Utils/apierrors.js";
 import { Apiresponse } from "../Utils/apiresponse.js";
 
@@ -88,8 +88,8 @@ export const updatePassword = async (req, res) => {
     if (!User)
       return res.status(404).json(new ApiError(404, "User not found"));
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    User.password = hashedPassword;
+    
+    User.password = newPassword;
     await User.save({ validateBeforeSave: false });
     otpStore.delete(email);
 
@@ -100,3 +100,4 @@ export const updatePassword = async (req, res) => {
     return res.status(500).json(new ApiError(500, error.message));
   }
 };
+
