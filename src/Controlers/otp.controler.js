@@ -68,7 +68,7 @@ export const sendOtp = async (req, res) => {
       </div>
     `;
 
-    // Send the email
+   
     await transporter.sendMail({
       from: `"Muhammad Muaaz Ali | Code With Muaaz" <${process.env.EMAIL_USER}>`,
       to: email,
