@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { ApiError } from "../Utils/apierrors.js";
 import { Apiresponse } from "../Utils/apiresponse.js";
-import { user } from "../models/user.model.js"; // ✅ Fix: import user model
+import { user } from "../models/user.model.js"; 
 
 
 export const otpStore = new Map();
