@@ -13,12 +13,12 @@ export const uploadUserImages = async (req, res) => {
   const coverImageLocalPath = req.files?.CoverImage?.[0]?.path || null;
 
   if (!avatarLocalPath) {
-//    return res.status(400).json(new ApiError (400,"Avatar File is required"))
+
         throw new ApiError(400, "Avatar File is required");
   }
 
   if (!coverImageLocalPath) {
-    //    return res.status(400).json(new ApiError (400,"Cover image File is required"))
+  
     throw new ApiError(400, "Cover Image File is required");
   }
 
