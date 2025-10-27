@@ -222,28 +222,28 @@ const updateAvatar = asynHandler(async(req,res) =>{
   if(!avatar?.url){
     throw new ApiError (500, "Failed to upload avatar image");
   }
-  await  user.findByIdAndUpdate(
+  const USER = await  user.findByIdAndUpdate(
     req.user._id,
     {$set:{Avatar: avatar.url}},
     {new : true}
   ).select("-password ");
-  return res.status(200).json ( new Apiresponse (200, {Avatar: avatar.url}, "Avatar updated successfully"));
+  return res.status(200).json ( new Apiresponse (200, USER, "Avatar updated successfully"));
 });
 const updateCoverImage = asynHandler(async(req,res) =>{
   const coverImageLocalPath  = req.file?.path;
   if(!coverImageLocalPath){
-    throw new ApiError (400, "Cover Image  image is required");
+    throw new ApiError (400, "Cover Image file is required");
   }
   upload_on_cloud(coverImageLocalPath);
   if(!coverImage?.url){
     throw new ApiError (500, "Failed to upload avatar image");
   }
-  await  user.findByIdAndUpdate(
+   const USER =   await  user.findByIdAndUpdate(
     req.user._id,
     {$set:{CoverImage: coverImage.url}},
     {new : true}
   ).select("-password ");
-  return res.status(200).json ( new Apiresponse (200, {CoverImage: coverImage.url}, "Cover Image updated successfully"));
+  return res.status(200).json ( new Apiresponse (200, USER, "Cover Image updated successfully"));
 });
 
 export { registerUser, loginUser, logoutUser , RefreshAccessToken , getCurrentUser , updateAvatar ,updateCoverImage};
