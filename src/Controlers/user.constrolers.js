@@ -5,6 +5,7 @@ import { uploadUserImages } from "../Validations/uploader_check.validation.js";
 import { Apiresponse } from "../Utils/apiresponse.js";
 import { otpStore } from "./otp.controler.js"; 
 import jwt from "jsonwebtoken";
+import { upload_on_cloud } from "../Utils/cloudnary.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -212,4 +213,37 @@ const getCurrentUser = asynHandler(async (req, res) => {
   return res.status(200).json(200,req.user,"Current user fetched successfully");
 });
 
-export { registerUser, loginUser, logoutUser , RefreshAccessToken , getCurrentUser };
+const updateAvatar = asynHandler(async(req,res) =>{
+  const avatarLocalPath  = req.file?.path;
+  if(!avatarLocalPath){
+    throw new ApiError (400, "Avatar image is required");
+  }
+  upload_on_cloud(avatarLocalPath);
+  if(!avatar?.url){
+    throw new ApiError (500, "Failed to upload avatar image");
+  }
+  await  user.findByIdAndUpdate(
+    req.user._id,
+    {$set:{Avatar: avatar.url}},
+    {new : true}
+  ).select("-password ");
+  return res.status(200).json ( new Apiresponse (200, {Avatar: avatar.url}, "Avatar updated successfully"));
+});
+const updateCoverImage = asynHandler(async(req,res) =>{
+  const coverImageLocalPath  = req.file?.path;
+  if(!coverImageLocalPath){
+    throw new ApiError (400, "Cover Image  image is required");
+  }
+  upload_on_cloud(coverImageLocalPath);
+  if(!coverImage?.url){
+    throw new ApiError (500, "Failed to upload avatar image");
+  }
+  await  user.findByIdAndUpdate(
+    req.user._id,
+    {$set:{CoverImage: coverImage.url}},
+    {new : true}
+  ).select("-password ");
+  return res.status(200).json ( new Apiresponse (200, {CoverImage: coverImage.url}, "Cover Image updated successfully"));
+});
+
+export { registerUser, loginUser, logoutUser , RefreshAccessToken , getCurrentUser , updateAvatar ,updateCoverImage};
