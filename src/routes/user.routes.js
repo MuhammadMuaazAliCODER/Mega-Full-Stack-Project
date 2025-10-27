@@ -3,6 +3,7 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  RefreshAccessToken,
 } from "../Controlers/user.constrolers.js";
 import {
   sendOtp,
@@ -33,7 +34,7 @@ router.post(
 
 router.post("/login", loginUser);
 router.post("/logout", verifyJWT, logoutUser);
-
+router.post("/refresh-token", RefreshAccessToken);
 router.post("/send-password-otp", sendPasswordResetOtp);
 router.post("/verify-password-otp", verifyPasswordResetOtp);
 router.patch("/update-password", updatePassword);

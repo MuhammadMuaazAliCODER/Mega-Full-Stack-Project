@@ -4,7 +4,7 @@ import { user } from "../models/user.model.js";
 import { uploadUserImages } from "../Validations/uploader_check.validation.js";
 import { Apiresponse } from "../Utils/apiresponse.js";
 import { otpStore } from "./otp.controler.js"; 
-
+import jwt from "jsonwebtoken";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -152,5 +152,44 @@ const logoutUser = asynHandler(async (req, res) => {
     .json(new Apiresponse(200, {}, "User logged out successfully"));
 });
 
+const RefreshAccessToken = async (req, res) => {
+  const incomming_RefresToken = req.cookies.refreshToken || req.body.refreshToken;
+  if( !incomming_RefresToken ){
+    throw new ApiError(401, "Unauthorized request ( Refresh token is required )");
+  }
+  console.log("Incoming Refresh Token , token secrect ", incomming_RefresToken ,  process.env.REFRESH_TOKEN_SECRET );
+ try {
+  const DecodedToken =  jwt.verify(
+     incomming_RefresToken,
+     process.env.REFRESH_TOKEN_SECRET
+   )
+   const USER = await user.findById(DecodedToken?._id);
+    console.log ("Decoded Token id ", DecodedToken?._id );
+  if( !USER ){
+     throw new ApiError(401, "Invalid Refresh Token - User not found");
+   }
+   if( USER?.RefreshToken !== incomming_RefresToken ){
+       throw new ApiError(401, "Refresh Token is expired or used in another device");
+   }
+   const options = {
+     httpOnly: true,
+     secure: true
+   }
+  const {accessToken , newRefreshToken} = await generateAccessAndRefreshToken(USER._id);
+  return res
+     .status(200)
+     .cookie("accessToken", accessToken, options)
+     .cookie("refreshToken", newRefreshToken, options)
+     .json(
+       new Apiresponse(
+         200,
+         { accessToken, refreshToken: newRefreshToken },
+         "Access token refreshed successfully"
+       )
+     );
+ } catch (error) {
+  throw new ApiError(401, error?.message || "Invalid Refresh Token" );
+ }
+};
 
-export { registerUser, loginUser, logoutUser };
+export { registerUser, loginUser, logoutUser , RefreshAccessToken };
