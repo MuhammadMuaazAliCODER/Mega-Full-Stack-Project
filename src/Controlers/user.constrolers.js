@@ -208,4 +208,8 @@ const RefreshAccessToken = async (req, res) => {
  }
 };
 
-export { registerUser, loginUser, logoutUser , RefreshAccessToken };
+const getCurrentUser = asynHandler(async (req, res) => {
+  return res.status(200).json(200,req.user,"Current user fetched successfully");
+});
+
+export { registerUser, loginUser, logoutUser , RefreshAccessToken , getCurrentUser };
