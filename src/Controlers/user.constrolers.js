@@ -153,30 +153,45 @@ const logoutUser = asynHandler(async (req, res) => {
 });
 
 const RefreshAccessToken = async (req, res) => {
+
   const incomming_RefresToken = req.cookies.refreshToken || req.body.refreshToken;
+
   if( !incomming_RefresToken ){
     throw new ApiError(401, "Unauthorized request ( Refresh token is required )");
   }
+
   console.log("Incoming Refresh Token , token secrect ", incomming_RefresToken ,  process.env.REFRESH_TOKEN_SECRET );
- try {
-  const DecodedToken =  jwt.verify(
+ 
+  try {
+ 
+    const DecodedToken =  jwt.verify(
      incomming_RefresToken,
      process.env.REFRESH_TOKEN_SECRET
-   )
-   const USER = await user.findById(DecodedToken?._id);
+ 
+    )
+ 
+    const USER = await user.findById(DecodedToken?._id);
     console.log ("Decoded Token id ", DecodedToken?._id );
-  if( !USER ){
+ 
+    if( !USER ){
      throw new ApiError(401, "Invalid Refresh Token - User not found");
-   }
-   if( USER?.RefreshToken !== incomming_RefresToken ){
+ 
+    }
+ 
+    if( USER?.RefreshToken !== incomming_RefresToken ){
        throw new ApiError(401, "Refresh Token is expired or used in another device");
-   }
-   const options = {
+ 
+      }
+ 
+      const options = {
      httpOnly: true,
      secure: true
-   }
-  const {accessToken , newRefreshToken} = await generateAccessAndRefreshToken(USER._id);
-  return res
+ 
+    }
+ 
+    const {accessToken , newRefreshToken} = await generateAccessAndRefreshToken(USER._id);
+ 
+    return res
      .status(200)
      .cookie("accessToken", accessToken, options)
      .cookie("refreshToken", newRefreshToken, options)
@@ -187,8 +202,10 @@ const RefreshAccessToken = async (req, res) => {
          "Access token refreshed successfully"
        )
      );
- } catch (error) {
-  throw new ApiError(401, error?.message || "Invalid Refresh Token" );
+ }
+  catch (error) {
+  
+    throw new ApiError(401, error?.message || "Invalid Refresh Token" );
  }
 };
 
