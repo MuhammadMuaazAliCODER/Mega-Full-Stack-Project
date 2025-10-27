@@ -32,11 +32,11 @@ router.post(
   registerUser
 );
 
-router.post("/login", loginUser);
 router.post("/logout", verifyJWT, logoutUser);
 router.post("/refresh-token", RefreshAccessToken);
 router.post("/send-password-otp", sendPasswordResetOtp);
 router.post("/verify-password-otp", verifyPasswordResetOtp);
+router.post("/login", loginUser);
 router.patch("/update-password", updatePassword);
 
 export default router;
